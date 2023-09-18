@@ -161,43 +161,121 @@ class GoogleClassroomController extends Controller
         }
     }
 
-    public function createCourseWithAlias()
+    public function createCourseWithAlias(Request $request, $cursoId, $alias)
     {
+        $client = new Client();
+        $client->setAuthConfig(env('GOOGLE_CLASSROOM_CREDENTIALS_PATH'));
+        $client->setAccessType('offline');
+
+        if ($client->getAccessToken()) {
+            // Configure o serviço do Google Classroom
+            $service = new Classroom($client);
+
+            // Dados do alias
+            $dadosAlias = new Google_Service_Classroom_CourseAlias([
+                'alias' => $alias,
+            ]);
+
+            // Crie o alias
+            $aliasCriado = $service->courses_aliases->create($cursoId, $dadosAlias);
+
+            // Redirecione de volta com uma mensagem de sucesso
+            return redirect()->route('boas-vindas')->with('success', 'Alias criado com sucesso.');
+        } else {
+            // Redirecione de volta com uma mensagem de erro
+            return redirect()->route('boas-vindas')->with('error', 'Erro na autenticação com o Google Classroom.');
+        }
 
     }
 
-    public function addAliasToCourse()
+    public function addAliasToCourse(Request $request, $cursoId, $alias)
     {
+        $client = new Client();
+        $client->setAuthConfig(env('GOOGLE_CLASSROOM_CREDENTIALS_PATH'));
+        $client->setAccessType('offline');
 
+        // Autentique o cliente
+        if ($client->getAccessToken()) {
+            // Configure o serviço do Google Classroom
+            $service = new Classroom($client);
+
+            // Dados do alias
+            $dadosAlias = new Google_Service_Classroom_CourseAlias([
+                'alias' => $alias,
+            ]);
+
+            // Adicione o alias ao curso
+            $service->courses_aliases->create($cursoId, $dadosAlias);
+
+            // Redirecione de volta com uma mensagem de sucesso
+            return redirect()->route('boas-vindas')->with('success', 'Alias adicionado com sucesso ao curso.');
+        } else {
+            // Redirecione de volta com uma mensagem de erro
+            return redirect()->route('boas-vindas')->with('error', 'Erro na autenticação com o Google Classroom.');
+        }
     }
 
-    public function listCoursesAliases()
+    public function listCoursesAliases(Request $request)
     {
+        $client = new Client();
+        $client->setAuthConfig(env('GOOGLE_CLASSROOM_CREDENTIALS_PATH'));
+        $client->setAccessType('offline');
 
+        // Autentique o cliente
+        if ($client->getAccessToken()) {
+            // Configure o serviço do Google Classroom
+            $service = new Classroom($client);
+
+            // Faça a solicitação para listar os aliases dos cursos
+            $aliases = $service->courses_aliases->listCoursesAliases();
+
+            // Retorne a lista de aliases para a visualização
+            return view('lista-aliases', compact('aliases'));
+        } else {
+            // Redirecione de volta com uma mensagem de erro
+            return redirect()->route('boas-vindas')->with('error', 'Erro na autenticação com o Google Classroom.');
+        }
     }
 
-    public function deleteCourseAlias()
+    public function deleteCourseAlias(Request $request, $cursoId, $alias)
     {
+        $client = new Client();
+        $client->setAuthConfig(env('GOOGLE_CLASSROOM_CREDENTIALS_PATH'));
+        $client->setAccessType('offline');
 
+        // Autentique o cliente
+        if ($client->getAccessToken()) {
+            // Configure o serviço do Google Classroom
+            $service = new Classroom($client);
+
+            // Faça a solicitação para excluir o alias
+            $service->courses_aliases->delete($cursoId, $alias);
+
+            // Redirecione de volta com uma mensagem de sucesso
+            return redirect()->route('boas-vindas')->with('success', 'Alias excluído com sucesso.');
+        } else {
+            // Redirecione de volta com uma mensagem de erro
+            return redirect()->route('boas-vindas')->with('error', 'Erro na autenticação com o Google Classroom.');
+        }
     }
 
-    public function createInvitation()
-    {
+    // public function createInvitation()
+    // {
 
-    }
+    // }
 
-    public function getInvitation()
-    {
+    // public function getInvitation()
+    // {
 
-    }
+    // }
 
-    public function acceptInvitation()
-    {
+    // public function acceptInvitation()
+    // {
 
-    }
+    // }
 
-    public function deleteInvitation()
-    {
+    // public function deleteInvitation()
+    // {
 
-    }
+    // }
 }
