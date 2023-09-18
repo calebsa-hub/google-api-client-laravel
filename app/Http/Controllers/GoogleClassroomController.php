@@ -160,4 +160,44 @@ class GoogleClassroomController extends Controller
             return redirect()->route('boas-vindas')->with('error', 'Erro na autenticação com o Google Classroom.');
         }
     }
+
+    public function createCourseWithAlias()
+    {
+
+    }
+
+    public function addAliasToCourse()
+    {
+
+    }
+
+    public function listCoursesAliases()
+    {
+
+    }
+
+    public function deleteCourseAlias()
+    {
+
+    }
+
+    public function createInvitation()
+    {
+
+    }
+
+    public function getInvitation()
+    {
+
+    }
+
+    public function acceptInvitation()
+    {
+
+    }
+
+    public function deleteInvitation()
+    {
+
+    }
 }
